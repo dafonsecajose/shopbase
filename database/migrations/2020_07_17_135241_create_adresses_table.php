@@ -25,7 +25,7 @@ class CreateAddressTable extends Migration
             $table->string('address_type')->default('ADDRESS_DELIVERY');
 
             $table->timestamps();
-            $table->foreign('product_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
