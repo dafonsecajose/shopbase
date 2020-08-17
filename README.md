@@ -10,4 +10,4 @@ Application created to exemplify some programming techniques using the laravel f
 
 ## License
 
-[MIT license](https://opensource.org/licenses/MIT).
+[MIT license](LICENSE).
