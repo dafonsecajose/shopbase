@@ -18,10 +18,12 @@ class OrderEmail implements ShouldQueue
 
     private $user;
     private $option;
+
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param User $user
+     * @param array $option
      */
     public function __construct(User $user, Array $option)
     {

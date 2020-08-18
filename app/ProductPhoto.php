@@ -9,6 +9,12 @@ class ProductPhoto extends Model
     //
 
     /**
+     * The attributes that are mass assignable
+     * @var string[]
+     */
+    protected $fillable = ['image', 'cover'];
+
+    /**
      * This method makes the 1: N relationship with the product_photos table
      * Este metodo faz o relacionamento  de 1 : N com a tabela product_photos
      *

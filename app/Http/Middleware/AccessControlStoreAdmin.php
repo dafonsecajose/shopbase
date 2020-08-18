@@ -16,7 +16,7 @@ class AccessControlStoreAdmin
     public function handle($request, Closure $next)
     {
         if(auth()->user()->role == 'ROLE_USER')
-            return redirect()-route('home');
+            return redirect()->route('home');
         return $next($request);
     }
 }

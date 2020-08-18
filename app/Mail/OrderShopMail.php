@@ -41,6 +41,6 @@ class OrderShopMail extends Mailable
         return $this->to($this->user->email, $this->user->name)
                     ->subject($this->option['subject'])
                     ->replyTo(env('MAIL_FROM_ADDRESS'))
-                    ->view('mail.orderShop', ['option' => $this->option , 'orderUser' => $this->orderUser]);
+                    ->view('email.orderShop', ['option' => $this->option , 'orderUser' => $this->orderUser]);
     }
 }

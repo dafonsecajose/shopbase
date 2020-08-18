@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Product;
-use Illuminate\Http\Request;
+use App\Traits\UploadTrait;
 
 class ProductController extends Controller
 {
-
+    use UploadTrait;
     private $product;
 
     public function __construct(Product $product)
@@ -37,7 +38,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::all('id', 'name');
+        $categories = Category::where('active', 'OK')->get(['id', 'name']);
 
         return view('admin.products.create', compact('categories'));
     }
@@ -45,10 +46,10 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param ProductRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         $data = $request->all();
         $categories = $request->get('categories', null);
@@ -59,6 +60,11 @@ class ProductController extends Controller
         $product = $this->product->create($data);
 
         $product->categories()->sync($categories);
+
+        if($request->hasFile('images')) {
+            $images = $this->imageUpload($request->file('images'), 'image');
+            $product->photos()->createMany($images);
+        }
 
         flash('Produto foi Criado com sucesso')->success();
         return redirect()->route('admin.products.index');
@@ -84,7 +90,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = $this->product->findOrFail($id);
-        $categories = Category::all('id', 'name');
+        $categories = Category::where('active', 'OK')->get(['id', 'name']);
+
 
         return view('admin.products.edit', compact('product', 'categories'));
     }
@@ -92,17 +99,23 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param ProductRequest $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
         $data = $request->all();
         $categories = $request->get('categories', null);
 
         $product = $this->product->find($id);
+
         $product->update($data);
+
+        if($request->hasFile('images')) {
+            $images = $this->imageUpload($request->file('images'), 'image');
+            $product->photos()->createMany($images);
+        }
 
         if(!is_null($categories))
             $product->categories()->sync($categories);

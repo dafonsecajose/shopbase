@@ -4,10 +4,8 @@ namespace App\Mail;
 
 use App\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use phpDocumentor\Reflection\Types\Integer;
 
 class OrderEmail extends Mailable
 {
@@ -19,7 +17,8 @@ class OrderEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param User $user
+     * @param array $op
      */
     public function __construct(User $user, Array $op)
     {
@@ -37,6 +36,6 @@ class OrderEmail extends Mailable
         return $this->to($this->user->email, $this->user->name)
                     ->subject($this->op['subject'])
                     ->replyTo(env('MAIL_FROM_ADDRESS'))
-                    ->view('email.order')->with(['user' => $this->user, 'option' => $this->op['option']]);
+                    ->markdown('email.order')->with(['user' => $this->user, 'option' => $this->op]);
     }
 }

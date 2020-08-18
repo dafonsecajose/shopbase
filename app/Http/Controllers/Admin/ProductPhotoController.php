@@ -10,7 +10,8 @@ class ProductPhotoController extends Controller
 {
     public function removePhoto($id)
     {
-        $photo = ProductPhoto::find('id', $id);
+        $photo = ProductPhoto::find($id);
+
 
         if(Storage::disk('public')->exists($photo->image))
             Storage::disk('public')->delete($photo->image);

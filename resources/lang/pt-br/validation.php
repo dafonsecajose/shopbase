@@ -146,6 +146,17 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name'  => 'nome',
+        'description' => 'descrição',
+        'resume'    => 'resumo',
+        'price' => 'preco',
+        'height' => 'altura',
+        'width' => 'largura',
+        'depth' => 'profundidade',
+        'weight' => 'peso',
+        'amount' => 'quantidade',
+
+    ],
 
 ];

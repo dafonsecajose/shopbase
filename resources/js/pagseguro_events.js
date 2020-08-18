@@ -9,8 +9,8 @@ cardNumber.addEventListener('keyup', function () {
                 let imgFlag = `<img src="https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/68x30/${res.brand.name}.png">`;
                 spanBrand.innerHTML = imgFlag;
                 document.querySelector('input[name=card_brand]').value = res.brand.name;
-
-                getInstallments(amountTransaction, res.brand.name);
+                brand = res.brand.name;
+                getInstallments(total, res.brand.name);
             },
             error: function (err) {
                 //console.log(err);
@@ -22,7 +22,7 @@ cardNumber.addEventListener('keyup', function () {
     }
 });
 
-let submitButton = document.querySelector('button.processCheckout');
+let submitButton = document.querySelector('button.proccessCheckout');
 
 submitButton.addEventListener('click', function (event) {
     event.preventDefault();
@@ -39,11 +39,12 @@ submitButton.addEventListener('click', function (event) {
         expirationMonth: document.querySelector('input[name=card_month]').value,
         expirationYear: document.querySelector('input[name=card_year]').value,
         success: function (res) {
-            processPayment(res.card.token, buttonTarget);
+            proccessPayment(res.card.token, buttonTarget);
         },
         error: function (err) {
             buttonTarget.disable = false;
             buttonTarget.textContent = 'Efetuar Pagamento';
+            console.log(err);
             for(let i in err.errors){
                 document.querySelector('div.msg').innerHTML = showErrorMessages(errorsMapPagSeguroJs(i));
             }

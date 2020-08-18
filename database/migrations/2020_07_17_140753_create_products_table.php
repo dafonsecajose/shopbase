@@ -18,12 +18,15 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('resume');
             $table->text('description');
+
             $table->decimal('price', 10, 2);
             $table->decimal('height', 8, 2);
             $table->decimal('width',  8, 2);
             $table->decimal('depth',  8, 2);
-            $table->number('amount');
+            $table->decimal('weight',  8, 2);
+            $table->integer('amount');
             $table->string('active')->default('OK');
+            $table->string('slug');
 
             $table->timestamps();
         });

@@ -16,6 +16,7 @@ class CategoryRequest extends FormRequest
         return true;
     }
 
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -34,4 +35,13 @@ class CategoryRequest extends FormRequest
             'required'  => 'O campo ":attribute" é obrigatorio'
         ];
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'name' => filter_var($this->name, FILTER_SANITIZE_STRIPPED),
+            'description' => filter_var($this->description, FILTER_SANITIZE_STRIPPED)
+        ]);
+    }
+
 }

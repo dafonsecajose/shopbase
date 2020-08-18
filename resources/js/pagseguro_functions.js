@@ -1,27 +1,31 @@
-function processPayment(token, buttonTarget) {
+function proccessPayment(token, buttonTarget) {
 
     let data = {
         card_token: token,
         hash: PagSeguroDirectPayment.getSenderHash(),
         installment: document.querySelector('select.select_installments').value,
         card_name: document.querySelector('input[name=card_name]').value,
+        shipChoice: ship,
         _token: csrf
     }
+
     $.ajax({
         type: 'POST',
         url: urlProccess,
         data: data,
         dataType: 'json',
         success: function (res) {
+            //console.log(res.data.order);
             toastr.success(res.data.message, 'Sucesso');
-            window.location.href = `${urlThanks}?order=${res.data.order}`;
+             window.location.href = `${urlThanks}?order=${res.data.order}`;
         },
         error: function (err) {
             buttonTarget.disable = false;
             buttonTarget.textContent = 'Efetuar Pagamento';
-
+            console.log(err);
             let message = JSON.parse(err.reponseText);
             document.querySelector('div.msg').innerHTML = showErrorMessages(message.data.message.error.message)
+
         }
     });
 }
@@ -35,12 +39,13 @@ function getInstallments(amount, brand) {
         success: function (res) {
             let selectInstallments = drawSelectInstallments(res.installments[brand]);
             document.querySelector('div.installments').innerHTML = selectInstallments;
+            //console.log(err);
         },
-        error: function (err) {
-
+        error: function (res) {
+            //console.log(res);
         },
         complete: function (res) {
-
+            //console.log(res);
         }
     });
 }
@@ -51,7 +56,7 @@ function drawSelectInstallments(installments) {
     select += '<select class="form-control select_installments">';
 
     for (let l of installments) {
-        select += `<option value="${l.quantity}|${l.installmentAmount}">${l.quantity}x de ${l.installmentAmount} - Total fica ${l.totalAmount}</option>`;
+        select += `<option value="${l.quantity}|${l.installmentAmount}">${l.quantity}x de ${l.installmentAmount.toFixed(2).replace('.', ',')} - Total fica ${l.totalAmount.toFixed(2).replace('.', ',')}</option>`;
     }
 
 
@@ -69,7 +74,7 @@ function showErrorMessages(message) {
 function errorsMapPagSeguroJs(code) {
     switch (code) {
         case "10000":
-            return 'Bandeira do cartção inválida!';
+            return 'Bandeira do cartão inválida!';
             break;
         case "10001":
             return 'Número do Cartão com tamanho inválido!';
