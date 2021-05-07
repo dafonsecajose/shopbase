@@ -3,13 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Slug;
+
+use App\Traits\SlugTrait;
 
 class Product extends Model
 {
     //
 
-   use Slug;
+    use SlugTrait;
 
     /**
      * The attributes that are mass assignable

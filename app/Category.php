@@ -2,7 +2,8 @@
 
 namespace App;
 
-use App\Traits\Slug;
+
+use App\Traits\SlugTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     //
-   use Slug;
+    use SlugTrait;
 
     /**
      * The attributes that are mass assignable

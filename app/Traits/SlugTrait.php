@@ -5,7 +5,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Str;
 
-trait Slug
+trait SlugTrait
 {
     public function setNameAttribute($value)
     {
