@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useBootstrap();
         \PagSeguro\Library::initialize();
         \PagSeguro\Library::cmsVersion()->setName("ShopBase")->setRelease("1.0.0");
         \PagSeguro\Library::moduleVersion()->setName("ShopBase")->setRelease("1.0.0");

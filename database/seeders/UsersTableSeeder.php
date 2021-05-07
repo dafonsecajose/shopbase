@@ -1,5 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
+use App\Address;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -11,8 +15,9 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\User::class, 5)->create()->each(function ($user){
-           $user->adresses()->save(factory(\App\Address::class)->make());
+        User::factory()->count(5)->create()->each(function ($user) {
+
+            $user->adresses()->save(Address::factory()->make());
         });
     }
 }

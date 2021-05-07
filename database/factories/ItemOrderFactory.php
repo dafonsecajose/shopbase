@@ -1,13 +1,31 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use App\Model;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\ItemOrder;
 
-$factory->define(\App\ItemOrder::class, function (Faker $faker) {
-    return [
-        'price' => $faker->randomFloat(2, 2, 10),
-        'amount' => $faker->randomNumber(2)
-    ];
-});
+class ItemOrderFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = ItemOrder::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+
+
+            return [
+                'price' => $this->faker->randomFloat(2, 2, 10),
+                'amount' => $this->faker->randomNumber(2)
+            ];
+    }
+}

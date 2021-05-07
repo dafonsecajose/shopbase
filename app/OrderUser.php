@@ -2,12 +2,14 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderUser extends Model
 {
+    use HasFactory;
 
-    protected $table ='orders_user';
+    protected $table = 'orders_user';
 
     /**
      * This attribute that are mass assignable

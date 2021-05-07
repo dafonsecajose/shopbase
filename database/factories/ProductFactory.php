@@ -1,22 +1,39 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use App\Model;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Product;
 
-$factory->define(\App\Product::class, function (Faker $faker) {
-    return [
-        'name' => $faker->name,
-        'resume' => $faker->sentence,
-        'description' => $faker->paragraph(4, true),
-        'price' => $faker->randomFloat(2, 2, 10),
-        'height' => $faker->randomFloat(2, 2, 10),
-        'width' => $faker->randomFloat(2, 2, 10),
-        'weight' => $faker->randomFloat(2, 2, 10),
-        'depth' => $faker->randomFloat(2, 2, 10),
-        'amount' => $faker->randomNumber(3),
-        'active' => 'OK',
-        'slug'  => $faker->slug
-    ];
-});
+class ProductFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Product::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+
+            return [
+            'name' => $this->faker->name,
+            'resume' => $this->faker->sentence,
+            'description' => $this->faker->paragraph(4, true),
+            'price' => $this->faker->randomFloat(2, 2, 10),
+            'height' => $this->faker->randomFloat(2, 2, 10),
+            'width' => $this->faker->randomFloat(2, 2, 10),
+            'weight' => $this->faker->randomFloat(2, 2, 10),
+            'depth' => $this->faker->randomFloat(2, 2, 10),
+            'amount' => $this->faker->randomNumber(3),
+            'active' => 'OK',
+            'slug'  => $this->faker->slug
+            ];
+    }
+}

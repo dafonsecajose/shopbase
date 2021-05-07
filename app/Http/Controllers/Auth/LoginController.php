@@ -19,7 +19,6 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
     use AuthenticatesUsers;
 
     /**
@@ -41,8 +40,8 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        if(session()->has('cart')){
-            if(!auth()->user()->adresses()->first()){
+        if (session()->has('cart')) {
+            if (!auth()->user()->adresses()->first()) {
                 return redirect()->route('user.address.create');
             }
             return redirect()->route('checkout.index');

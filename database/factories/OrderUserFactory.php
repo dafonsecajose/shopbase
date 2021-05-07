@@ -1,14 +1,30 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
-use App\Model;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use App\OrderUser;
 
-$factory->define(\App\OrderUser::class, function (Faker $faker) {
-    return [
-        'reference' => $faker->randomNumber(10),
-        'pagseguro_code' => $faker->randomNumber(10),
-        'pagseguro_status' => $faker->randomNumber(1)
-    ];
-});
+class OrderUserFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = OrderUser::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+            return [
+                'reference' => $this->faker->randomNumber(10),
+                'pagseguro_code' => $this->faker->randomNumber(10),
+                'pagseguro_status' => $this->faker->randomNumber(1)
+            ];
+    }
+}

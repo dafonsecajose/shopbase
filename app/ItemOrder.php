@@ -2,13 +2,15 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ItemOrder extends Model
 {
     //
+    use HasFactory;
 
-    protected $table ='items_order';
+    protected $table = 'items_order';
     /**
      * The attributes that are mass assignable
      * @var string[]

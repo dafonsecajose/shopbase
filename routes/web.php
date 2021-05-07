@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,5 +75,3 @@ Route::get('mail', function () {
 });
 
 Route::post('shipping', 'ShippingController@shipping')->name('shipping');
-
-

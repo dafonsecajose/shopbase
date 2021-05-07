@@ -3,12 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
 use App\Traits\SlugTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
     //
+    use HasFactory;
 
     use SlugTrait;
 
@@ -19,7 +20,8 @@ class Product extends Model
     protected $fillable = ['name', 'resume', 'description', 'price', 'height', 'width',
         'weight', 'depth', 'amount', 'active'];
 
-    public function getThumbAttribute(){
+    public function getThumbAttribute()
+    {
         return $this->photos()->where('cover', 'OK');
     }
 
