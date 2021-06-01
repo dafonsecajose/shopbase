@@ -49,9 +49,9 @@ class ProductRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'name'          => filter_var($this->name,FILTER_SANITIZE_STRIPPED),
-            'resume'        => filter_var($this->resume,FILTER_SANITIZE_STRIPPED),
-            'description'   => filter_var($this->description,FILTER_SANITIZE_STRIPPED),
+            'name'          => filter_var($this->name, FILTER_SANITIZE_STRIPPED),
+            'resume'        => filter_var($this->resume, FILTER_SANITIZE_STRIPPED),
+            'description'   => filter_var($this->description, FILTER_SANITIZE_STRIPPED),
             'price'         => filter_var($this->price, FILTER_VALIDATE_FLOAT),
             'height'        => filter_var($this->height, FILTER_VALIDATE_FLOAT),
             'width'         => filter_var($this->width, FILTER_VALIDATE_FLOAT),

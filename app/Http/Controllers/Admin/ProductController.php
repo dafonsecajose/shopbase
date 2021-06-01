@@ -11,6 +11,7 @@ use App\Traits\UploadTrait;
 class ProductController extends Controller
 {
     use UploadTrait;
+
     private $product;
 
     public function __construct(Product $product)
@@ -61,7 +62,7 @@ class ProductController extends Controller
 
         $product->categories()->sync($categories);
 
-        if($request->hasFile('images')) {
+        if ($request->hasFile('images')) {
             $images = $this->imageUpload($request->file('images'), 'image');
             $product->photos()->createMany($images);
         }
@@ -112,13 +113,14 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        if($request->hasFile('images')) {
+        if ($request->hasFile('images')) {
             $images = $this->imageUpload($request->file('images'), 'image');
             $product->photos()->createMany($images);
         }
 
-        if(!is_null($categories))
+        if (!is_null($categories)) {
             $product->categories()->sync($categories);
+        }
 
         flash('Produto atualizado com Sucesso!')->success();
         return redirect()->route('admin.products.index');

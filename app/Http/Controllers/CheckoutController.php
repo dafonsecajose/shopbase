@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jobs\OrderEmail;
 use App\Jobs\OrderShopMail;
 use App\OrderUser;
+use App\Payment\PagSeguro\Boleto;
 use App\Payment\PagSeguro\CreditCard;
 use App\Payment\PagSeguro\Notification;
 use App\Product;
@@ -25,7 +26,9 @@ class CheckoutController extends Controller
                 return redirect()->route('login');
             }
 
-            if (!session()->has('cart')) return redirect()->route('home');
+            if (!session()->has('cart')) {
+                return redirect()->route('home');
+            }
 
             $this->makePagSeguroSession();
 
@@ -59,9 +62,11 @@ class CheckoutController extends Controller
             $cartItems = session()->get('cart');
             $reference = Uuid::uuid4();
 
-            $creditCardPayment = new CreditCard($cartItems, $user, $dataPost, $reference, $shipChoice);
+            $payment = $dataPost['paymentType'] == 'BOLETO'
+                    ? new Boleto($cartItems, $user, $reference, $shipChoice, $dataPost['hash'])
+                    : new CreditCard($cartItems, $user, $dataPost, $reference, $shipChoice);
 
-            $result = $creditCardPayment->doPayment();
+            $result = $payment->doPayment();
 
             $userOrder = [
                 'reference' => $reference,
@@ -92,18 +97,23 @@ class CheckoutController extends Controller
             ];
 
 
-            \App\Jobs\OrderEmail::dispatch(auth()->user(), $op)->delay(now()->addSecond(15));
+           // \App\Jobs\OrderEmail::dispatch(auth()->user(), $op)->delay(now()->addSecond(15));
 
             session()->forget('cart');
             session()->forget('pagseguro_session_code');
 
+            $dataJson = [
+                'status' => true,
+                'message' => 'Pedido criado com sucesso!',
+                'order' => $reference,
+                'shipRes' => $shipChoice,
+            ];
+            if ($dataPost['paymentType'] == 'BOLETO') {
+                $dataJson['link_boleto'] = $result->getPaymentLink();
+            }
+
             return response()->json([
-                'data' => [
-                    'status' => true,
-                    'message' => 'Pedido criado com sucesso!',
-                    'order' => $reference,
-                    'shipRes' => $shipChoice,
-                ]
+                'data' => $dataJson
             ]);
 
 //        } catch (\Exception $e) {
@@ -153,14 +163,11 @@ class CheckoutController extends Controller
                     'option' => 3
                 ];
                 OrderShopMail::dispatch($owner, $optionOwner, $orderUser);
-
             }
-
         } catch (\Exception $e) {
             $message = env('APP_DEBUG') ? $e->getMessage() : '';
             return response()->json(['error' => $message], 500);
         }
-
     }
 
     private function makePagSeguroSession()
@@ -171,18 +178,15 @@ class CheckoutController extends Controller
             );
 
             session()->put('pagseguro_session_code', $sessionCode->getResult());
-
         }
     }
 
     private function removeItemStock($items)
     {
-        foreach ($items as $item){
+        foreach ($items as $item) {
             $product = Product::find($item['id']);
                 $product->amount -= $item['amount'];
                 $product->update();
         }
     }
-
-
 }

@@ -15,7 +15,7 @@ class CartController extends Controller
         $newCart = $this->verifyAmountProduct($cart);
 
 
-        if(multi_array_key_exists('erro', $newCart)){
+        if (multi_array_key_exists('erro', $newCart)) {
             flash('Opss! Alguns produtos estão em falta no estoque vefique o carrinho')->warning();
         }
         $cart = session()->get('cart');
@@ -31,17 +31,19 @@ class CartController extends Controller
 
         $product = Product::whereSlug($productData['slug']);
 
-        if(!$product->count() || $productData['amount'] <= 0 ) return redirect()->route('home');
+        if (!$product->count() || $productData['amount'] <= 0) {
+            return redirect()->route('home');
+        }
 
 
         $product = $product->first(['id', 'name', 'price'])->toArray();
         $product = array_merge($productData, $product);
 
 
-        if(session()->has('cart')){
+        if (session()->has('cart')) {
             $products = session()->get('cart');
             $productsSlugs = array_column($products, 'slug');
-            if(in_array($product['slug'], $productsSlugs)) {
+            if (in_array($product['slug'], $productsSlugs)) {
                 $products = $this->productIncrement($product['slug'], $product['amount'], $products);
                 session()->put('cart', $products);
                 $this->configShipping();
@@ -49,11 +51,10 @@ class CartController extends Controller
                 session()->push('cart', $product);
                 $this->configShipping();
             }
-        }else {
+        } else {
             $products[] = $product;
             session()->put('cart', $products);
             $this->configShipping();
-
         }
         flash('Product adicionado no carrinho!')->success();
         return redirect()->route('product.single', ['slug' => $product['slug']]);
@@ -61,12 +62,13 @@ class CartController extends Controller
 
     public function remove($slug)
     {
-        if(!session()->has('cart'))
+        if (!session()->has('cart')) {
             return redirect()->route('cart.index');
+        }
 
         $products = session()->get('cart');
-        $products = array_filter($products, function ($line) use($slug){
-           return $line['slug'] != $slug;
+        $products = array_filter($products, function ($line) use ($slug) {
+            return $line['slug'] != $slug;
         });
 
         session()->put('cart', $products);
@@ -84,18 +86,19 @@ class CartController extends Controller
 
     private function productIncrement($slug, $amount, $products)
     {
-        $products = array_map(function ($line) use($slug, $amount){
-           if($slug == $line['slug']){
-               $line['amount'] += $amount;
-           }
-           return $line;
+        $products = array_map(function ($line) use ($slug, $amount) {
+            if ($slug == $line['slug']) {
+                $line['amount'] += $amount;
+            }
+            return $line;
         }, $products);
 
         return $products;
     }
 
-    private function verifyAmountProduct($cart){
-        if(!multi_array_key_exists('erro', $cart)) {
+    private function verifyAmountProduct($cart)
+    {
+        if (!multi_array_key_exists('erro', $cart)) {
             $newCartItens = array_map(function ($line) {
                 $product = Product::find($line['id']);
                 if ($product->amount == 0) {
@@ -109,11 +112,11 @@ class CartController extends Controller
                 return $line;
             }, $cart);
             session()->put('cart', $newCartItens);
-        }else {
+        } else {
             $newCartItens = array_map(function ($line) {
                 if ($line['amount'] == 0) {
                     unset($line);
-                } else{
+                } else {
                     unset($line['erro']);
                     return $line;
                 }
@@ -127,13 +130,14 @@ class CartController extends Controller
         return $newCartItens;
     }
 
-    private function configShipping(){
+    private function configShipping()
+    {
         $cart = session()->get('cart');
         $shipping['height'] = 0;
         $shipping['width'] = 0;
         $shipping['depth'] = 0;
         $shipping['weight'] = 0;
-        foreach ($cart as $item){
+        foreach ($cart as $item) {
             $product = Product::find($item['id']);
             $shipping['weight'] += ($product->weight * $item['amount']);
             $shipping['height'] = ($shipping['height'] >= $product->height) ? $shipping['height'] : $product->height;

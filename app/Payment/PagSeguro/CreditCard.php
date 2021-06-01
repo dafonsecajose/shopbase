@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Payment\PagSeguro;
-
 
 class CreditCard
 {
@@ -44,7 +42,7 @@ class CreditCard
         list($shipCode, $shipPrice, $shipDeadline) = explode("|", $this->shipping);
 
         $creditCard->addItems()->withParameters(
-            $shipCode.'_ship',
+            $shipCode . '_ship',
             'Shipping',
             1,
             floatval($shipPrice)
