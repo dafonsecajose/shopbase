@@ -72,6 +72,8 @@ class CheckoutController extends Controller
                 'reference' => $reference,
                 'pagseguro_code' => $result->getCode(),
                 'pagseguro_status' => $result->getStatus(),
+                'type_payment' => $dataPost['paymentType'],
+                'link_boleto' => $dataPost['paymentType'] == 'BOLETO' ? $result->getPaymentLink() : ''
             ];
 
             $userOrder = $user->orders()->create($userOrder);

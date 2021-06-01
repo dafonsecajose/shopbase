@@ -15,7 +15,7 @@ class OrderUser extends Model
      * This attribute that are mass assignable
      * @var string[]
      */
-    protected $fillable = ['reference', 'pagseguro_code', 'pagseguro_status'];
+    protected $fillable = ['reference', 'pagseguro_code', 'pagseguro_status', 'type_payment', 'link_boleto'];
 
     /**
      * This method makes the 1: N relationship with the itens_order table
